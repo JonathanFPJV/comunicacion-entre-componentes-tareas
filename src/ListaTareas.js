@@ -1,20 +1,27 @@
 import React from 'react';
-import Tarea from './Tarea';
+import { List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 function ListaTareas({ tareas, eliminarTarea, editarTarea, toggleCompletada }) {
   return (
-    <ul>
+    <List>
       {tareas.map((tarea, index) => (
-        <Tarea
-          key={index}
-          tarea={tarea.texto}
-          completada={tarea.completada}
-          onDelete={() => eliminarTarea(index)}
-          onEdit={(nuevoTexto) => editarTarea(index, nuevoTexto)}
-          onToggleCompletada={() => toggleCompletada(index)}
-        />
+        <ListItem key={index} divider>
+          <Checkbox
+            checked={tarea.completada}
+            onClick={() => toggleCompletada(index)}
+          />
+          <ListItemText primary={tarea.texto} />
+          <IconButton onClick={() => editarTarea(index)}>
+            <EditIcon color="primary" />
+          </IconButton>
+          <IconButton onClick={() => eliminarTarea(index)}>
+            <DeleteIcon color="secondary" />
+          </IconButton>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 }
 

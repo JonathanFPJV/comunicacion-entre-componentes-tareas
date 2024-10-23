@@ -1,11 +1,32 @@
 import React, { useState } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { Box, Grid, Typography } from '@mui/material'; // Importamos Box y Grid
 import TareaForm from './TareaForm';
 import ListaTareas from './ListaTareas';
 import Filtros from './Filtros';
 
-function App(){
+// Crear tema personalizado
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#6A0572', // Un color poco común (morado oscuro)
+    },
+    secondary: {
+      main: '#FF6F61', // Un color vibrante (rojo coral)
+    },
+    background: {
+      default: '#f7f7f7', // Fondo gris claro para minimalismo
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, sans-serif', // Usa fuentes minimalistas como Roboto
+  },
+});
+
+function App() {
   const [tareas, setTareas] = useState([]);
-  const [filtro, setFiltro] = useState("Todas");
+  const [filtro, setFiltro] = useState('Todas');
 
   const agregarTarea = (texto) => {
     setTareas([...tareas, { texto, completada: false }]);
@@ -34,24 +55,37 @@ function App(){
   };
 
   let tareasFiltradas = tareas;
-  if (filtro === "Pendientes") {
+  if (filtro === 'Pendientes') {
     tareasFiltradas = tareas.filter((tarea) => !tarea.completada);
-  }else if(filtro === "Completadas"){
+  } else if (filtro === 'Completadas') {
     tareasFiltradas = tareas.filter((tarea) => tarea.completada);
   }
 
   return (
-    <div className='App'>
-      <h1>Lista de tareas</h1>
-      <TareaForm agregarTarea={agregarTarea} />
-      <Filtros filtrarTareas={filtrarTareas} />
-      <ListaTareas
-        tareas={tareasFiltradas}
-        eliminarTarea={eliminarTarea}
-        editarTarea={editarTarea}
-        toggleCompletada={toggleCompletada}  
-      />
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box p={4}> {/* Agrega padding alrededor de toda la app */}
+        <Typography variant="h4" align="center" gutterBottom>
+          Lista de tareas
+        </Typography>
+        <Grid container spacing={2}> {/* Usa Grid para alinear los componentes */}
+          <Grid item xs={12}>
+            <TareaForm agregarTarea={agregarTarea} />
+          </Grid>
+          <Grid item xs={12}>
+            <Filtros filtrarTareas={filtrarTareas} />
+          </Grid>
+          <Grid item xs={12}>
+            <ListaTareas
+              tareas={tareasFiltradas}
+              eliminarTarea={eliminarTarea}
+              editarTarea={editarTarea}
+              toggleCompletada={toggleCompletada}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
   );
 }
 
